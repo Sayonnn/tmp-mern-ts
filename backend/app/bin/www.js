@@ -2,13 +2,15 @@
 import http from "http";
 import app from "../app.js";  // import your Express app
 
-const PORT = normalizePort(process.env.PORT || "3000");
+const PORT = normalizePort(process.env.PORT || "5000");
+const FRONTEND_PORT = normalizePort(process.env.FRONTEND_PORT || "8001");
 app.set("port", PORT);
 
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Frontend running at http://localhost:${FRONTEND_PORT}`);
 });
 
 server.on("error", onError);

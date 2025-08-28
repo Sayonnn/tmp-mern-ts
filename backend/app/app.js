@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.get("/", (req, res) => {
-  res.json({ message: "Hello from Express App" });
+  res.json({ message: "Hello Future DevOps" });
 });
 
 export default app;
