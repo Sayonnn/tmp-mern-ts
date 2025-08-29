@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import http from "http";
 import app from "../app.js";  // import your Express app
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = normalizePort(process.env.PORT || "5000");
 const FRONTEND_PORT = normalizePort(process.env.FRONTEND_PORT || "8001");

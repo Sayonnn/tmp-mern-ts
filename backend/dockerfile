@@ -1,27 +1,20 @@
-# ---------- Backend Dockerfile ----------
-
-# Use the official Node.js v22 image as the base
-# (matches your local Node version: v22.18.0)
-FROM node:22
-
-# Set the working directory inside the container to /app
-# All following commands will run from here
+# install dependecies
+FROM node:22 AS Deps
 WORKDIR /app
-
-# Copy package.json and package-lock.json (if present) into the container
-# Doing this first allows Docker to cache dependencies separately
-COPY package*.json ./
-
-# Install only production dependencies (skips dev deps like nodemon)
-# This keeps the image smaller and faster for production use
+COPY package*.json .
 RUN npm install --only=production
 
-# Copy the rest of your backend source code into the container
+# build app
+FROM node:22 AS Builder
+WORKDIR /app
+COPY --from=Deps /app/node_modules ./node_modules
 COPY . .
+# For Typescript backend, uncomment the following line
+# RUN npm run build
 
-# Expose port 5000 (adjust this if your Express app listens on another port)
+# run app
+FROM node:alpine AS Runtime
+WORKDIR /app
+COPY --from=Builder /app ./
 EXPOSE 5000
-
-# Command to start the server inside the container
-# Runs "node app/bin/www.js" which is your backend entry point
 CMD ["npm", "run", "start"]

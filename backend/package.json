@@ -5,8 +5,8 @@
   "main": "app/bin/www.js",
   "type": "module",
   "scripts": {
-  "start": "node app/bin/www.js",
-  "dev": "nodemon app/bin/www.js"
+    "start": "node app/bin/www.js",
+    "dev": "nodemon app/bin/www.js"
   },
   "keywords": [],
   "author": "",

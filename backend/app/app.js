@@ -17,4 +17,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello Future DevOps" });
 });
 
+app.get("/api", (req, res) => {
+  res.json("Hello Future DevOps Engineer");
+});
+
 export default app;
