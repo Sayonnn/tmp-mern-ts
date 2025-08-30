@@ -1,24 +1,42 @@
-version: "3.9"
 services:
   backend:
     build: ./backend
     container_name: backend-service
-    ports:
+    ports: # remove on production
       - "5001:5000"
     environment:
       - PORT=5000
       - FRONTEND_PORT=8001
       - NODE_ENV=production
+      - DB_USER=upguard
+      - DB_PASSWORD=upguard19!
+      - DB_NAME=db_upguard
+      - DB_HOST=postgres   # inside docker network, service name = host
+      - DB_PORT=5432
+    depends_on:
+      - postgres
 
   frontend:
     build: ./frontend
     container_name: frontend-service
-    ports:
+    ports: # remove on production
       - "8001:80"
     depends_on:
       - backend
+
+  postgres:
+    image: postgres:16
+    container_name: db_upguard
+    restart: always
+    ports: # remove on production
+      - "5432:5432"
     environment:
-      - VITE_API_URL=http://backend:5001 #change this with actual backend url
+      POSTGRES_USER: upguard
+      POSTGRES_PASSWORD: upguard19!
+      POSTGRES_DB: db_upguard
+    volumes:
+      - db_upguard_data:/var/lib/postgresql/data
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -30,3 +48,6 @@ services:
     depends_on:
       - backend
       - frontend
+
+volumes:
+  db_upguard_data:
