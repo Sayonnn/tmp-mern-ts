@@ -1,6 +1,6 @@
 # upguard
 Full template of MERN with the needed dependencies for development. *** run npm install on frontend and backend folders ***
-
+Github: https://github.com/Sayonnn/upguard.git
 ## database credentials
 ```
 docker run --name db_upguard \
