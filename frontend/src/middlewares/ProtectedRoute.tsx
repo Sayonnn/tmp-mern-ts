@@ -1,9 +1,12 @@
 import { Navigate } from "react-router-dom";
 import type { ProtectedRouteProps } from "../interfaces/authInterface";
 
-function ProtectedRoute({isAuthenticated,children}:ProtectedRouteProps){
+function ProtectedRoute({isAuthenticated,children,role}:ProtectedRouteProps){
   if(!isAuthenticated){
-    return <Navigate to="/login" />;
+    if(role === "admin"){
+      return <Navigate to="/upguard-admin" />;
+    }
+    return <Navigate to="/" />;
   }
   return children;
 }

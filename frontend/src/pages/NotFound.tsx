@@ -1,9 +1,10 @@
 function NotFound() {
   return (
-  <div className="flex flex-col items-center justify-center h-screen">
-    <h1>404</h1>
-    <p>Page not found</p>
-  </div>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>404</h1>
+      <p>Page not found!</p>
+      <a href="/">Go back home</a>
+    </div>
   );
 }
 

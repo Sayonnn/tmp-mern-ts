@@ -2,41 +2,48 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
-import pkg from "pg";
+import dotenv from "dotenv";
+dotenv.config();
+import { pool } from "./database/connection.js";
+import ClientAuthRoutes from "./routes/auth.routes.js";
+import adminAuthRoutes from "./admin/routes/auth.routes.js";
 
-const { Pool } = pkg;
 const app = express();
 
-// Middlewares
+/** Middlewares */
 app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database connection pool
-const pool = new Pool({
-  user: process.env.DB_USER || "upguard",
-  host: process.env.DB_HOST || "postgres",
-  database: process.env.DB_NAME || "db_upguard",
-  password: process.env.DB_PASSWORD || "upguard19!",
-  port: process.env.DB_PORT || 5432,
-});
 
-// Routes
+/** Admin Routes */
+app.use("/upguard-admin/auth", adminAuthRoutes);
+
+/** Client Routes */
+app.use("/auth", ClientAuthRoutes);
+
+/** Index Route */
 app.get("/", (req, res) => {
-  res.json({ message: "Hello Future DevOps" });
+  res.json({ message: "Welcome to Upguard | The number 1 website Performance booster and Web Monitoring Service" });
 });
 
-app.get("/api", (req, res) => {
-  res.json("Hello Future DevOps Engineer");
+/** Test API Endpoint */
+app.get("/api-test", (req, res) => {
+  try {
+    res.json("Backend API Connection Successful");
+  } catch (error) {
+    console.error("API Error:", error);
+    res.status(500).json({ error: error.message});
+  }
 });
 
-// Test DB connection
+/** Test DB connection */
 app.get("/db-test", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
-    res.json({ db_time: result.rows[0] });
+    res.json({ db_time: result.rows[0], message: "Database connection successful" });
   } catch (err) {
     console.error("DB Error:", err);
     res.status(500).json({ error: "Database connection failed" });
