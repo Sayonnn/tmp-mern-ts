@@ -1,6 +1,6 @@
 import { startQuery } from "../../utils/query.js";
 import { hashPassword } from "../../utils/hash.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import { generateAccessToken, generateRefreshToken } from "../../utils/jwt.js";
 
 export const registerAdmin = async (email, password, username) => {
     /** Check Email Exists */

@@ -4,9 +4,12 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 dotenv.config();
-import { pool } from "./database/connection.js";
+import { pool } from "./configs/database.js";
 import ClientAuthRoutes from "./routes/auth.routes.js";
 import adminAuthRoutes from "./admin/routes/auth.routes.js";
+import adminMailRoutes from "./admin/routes/mail.routes.js";
+import ClientMailRoutes from "./routes/mail.routes.js";
+import logsRoutes from "./routes/log.routes.js";
 
 const app = express();
 
@@ -17,12 +20,13 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 /** Admin Routes */
 app.use("/upguard-admin/auth", adminAuthRoutes);
+app.use("/upguard-admin/mailer", adminMailRoutes);
 
 /** Client Routes */
 app.use("/auth", ClientAuthRoutes);
+app.use("/mailer", ClientMailRoutes);
 
 /** Monitoring Routes */
 app.use("/api", logsRoutes);

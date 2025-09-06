@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-
 export const config = {
     port: process.env.PORT || 5000, 
     db:{
@@ -17,5 +16,14 @@ export const config = {
         refresh_token_expires_in: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
         algorithm: process.env.JWT_ALGORITHM
     },
-    redis:{}
+    redis:{},
+    mail:{
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        secure: process.env.MAIL_SECURE,
+        auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
+        }
+    }
 }

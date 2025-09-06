@@ -11,3 +11,16 @@ docker run --name db_upguard \
   -v db_upguard_data:/var/lib/postgresql/data \
   -d postgres:16
 ``` 
+
+## mail credentials
+```
+Email: support@judydropship.com
+Email: noreply@judydropship.com
+Password: JudyDropship@19!
+```
+
+## steps after cloning
+
+## NOTES
+The structure of this project is as follows:
+Routes > Controllers > Services > Utils

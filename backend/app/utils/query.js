@@ -1,4 +1,4 @@
-import { pool } from "../database/connection.js";
+import { pool } from "../configs/database.js";
 
 
 /** 

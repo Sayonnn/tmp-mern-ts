@@ -1,13 +1,24 @@
+# PORT
 PORT=5000
 FRONTEND_PORT=8001
 NODE_ENV=development
+
+# DATABASE
 DB_HOST=postgres
 DB_USER=upguard
 DB_PASSWORD=upguard19!
 DB_NAME=db_upguard
 DB_PORT=5432
 
+# JWT
 JWT_SECRET=upguard_jwt_secret_19!
 JWT_ACCESS_TOKEN_EXPIRES_IN=60m
 JWT_REFRESH_TOKEN_EXPIRES_IN=7d
 JWT_ALGORITHM=HS256
+
+# MAIL
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_SECURE=true
+MAIL_USER=your-email@example.com
+MAIL_PASS=your-password

@@ -5,7 +5,7 @@ const router = express.Router();
  * POST /api/logs
  * Accepts error logs from frontend and optionally stores or forwards them
  */
-app.post("/logs", (req, res) => {
+router.post("/logs", (req, res) => {
     try {
       const { message, stack, context } = req.body;
   
