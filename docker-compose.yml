@@ -2,6 +2,7 @@ services:
   backend:
     build: ./backend
     container_name: backend-service
+    # image: dualnoiz/speedmate-backend:latest
     ports: # remove on production
       - "5001:5000"
     environment:
@@ -19,6 +20,7 @@ services:
   frontend:
     build: ./frontend
     container_name: frontend-service
+    # image: dualnoiz/speedmate-frontend:latest
     ports: # remove on production
       - "8001:80"
       # - "80:80"       # only frontend exposed
