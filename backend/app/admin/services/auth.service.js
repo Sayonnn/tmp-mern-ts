@@ -60,7 +60,7 @@ export const loginAdmin = async (username, password) => {
     /** Verify Password */
     const isPasswordValid = await comparePassword(password, user.password);
     if(!isPasswordValid){
-        throw { field: "password", message: "Invalid password" };
+        throw { field: "password", message: "Incorrect password" };
     }
 
     /** Generate Tokens */

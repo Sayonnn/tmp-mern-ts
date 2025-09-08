@@ -14,15 +14,15 @@ export default async function sendEmail({
   name = "",
   link = "",
   template = "",
-  subject = "SpeedMate Expert",
+  subject = `${config.app.emailHeader}`,
   attachments = [],
 }) {
   const recipients = Array.isArray(to) ? to.join(", ") : to;
 
   await transporter.sendMail({
-    from: `"SpeedMate Expert" <${config.mail.auth.user}>`,
-    to: recipients,
-    subject,
+    from: `"${config.app.emailHeader}" <${config.mail.auth.user}>`,
+    to: recipients, 
+    subject: subject + " | " + config.app.coolName,
     template,
     context: { name, link },
     attachments,

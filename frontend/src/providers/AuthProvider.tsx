@@ -5,6 +5,7 @@ import { postDatas } from "../services/api.service";
 import { setStorage, removeStorage, getStorage } from "../utils/storage.handler";
 import { jwtDecode } from "jwt-decode";
 import type { User } from "../interfaces/userInterface";
+import useAppContext from "../hooks/useApp";
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [initialized, setInitialized] = useState<boolean>(false);
+  const { configs } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const token = getStorage("authToken");
         const storedUser = getStorage("authUser");
-  
+   
         if (token) {
           try {
             const decoded: DecodedToken = jwtDecode(token);
@@ -83,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const response = await postDatas({
-        url: role === "admin" ? "/speedmate-admin/auth/login" : "/auth/login",
+        url: role === "admin" ? `/${configs.appName}-admin/auth/login` : "/auth/login",
         data: { username, password },
       });
 

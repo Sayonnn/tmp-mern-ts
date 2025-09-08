@@ -10,12 +10,10 @@ function AdminRoutes() {
 
   return (
     <Routes>
-      {/* When user goes to /speedmate-admin, show Login */}
       <Route path="" element={<Login />} />
 
-      {/* Protected Dashboard (full path: /speedmate-admin/dashboard) */}
       <Route
-        path="dashboard"
+        path="dashboard"  
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated} role="admin">
             <Dashboard />

@@ -1,36 +1,38 @@
 #!/bin/bash
 
 # -----------------------------
-# PostgreSQL Database Setup Script (Optimized, spm_clients + spm_admins separate)
+# PostgreSQL Database Setup Script (Optimized, ${DB_ABBR}_clients + ${DB_ABBR}_admins separate)
 # -----------------------------
 
 # Change these variables to match your environment
-DB_NAME="db_speedmate"
-DB_USER="speedmate"
-DB_PASSWORD="speedmate19!"
-DB_CONTAINER="db_speedmate"
+APP_NAME="speedmate"  
+DB_ABBR="spm"
+DB_NAME="db_${APP_NAME}"
+DB_USER="${DB_ABBR}"
+DB_PASSWORD="${APP_NAME}19!"
+DB_CONTAINER="db_${APP_NAME}"
 DB_HOST="postgres"
 DB_PORT="5432"
 
 # Export password so psql can use it
 export PGPASSWORD=$DB_PASSWORD
 
-echo "Dropping old spm_ tables (if any) and creating optimized tables in database '$DB_NAME'..."
+echo "Dropping old ${DB_ABBR}_ tables (if any) and creating optimized tables in database '$DB_NAME'..."
 
 docker exec -i $DB_CONTAINER psql -U $DB_USER -d $DB_NAME <<EOSQL
 
 -- -----------------------------
 -- Drop existing tables (order matters due to FKs)
 -- -----------------------------
-DROP TABLE IF EXISTS spm_login_history CASCADE;
-DROP TABLE IF EXISTS spm_refresh_tokens CASCADE;
-DROP TABLE IF EXISTS spm_admins CASCADE;
-DROP TABLE IF EXISTS spm_clients CASCADE;
+DROP TABLE IF EXISTS ${DB_ABBR}_login_history CASCADE;
+DROP TABLE IF EXISTS ${DB_ABBR}_refresh_tokens CASCADE;
+DROP TABLE IF EXISTS ${DB_ABBR}_admins CASCADE;
+DROP TABLE IF EXISTS ${DB_ABBR}_clients CASCADE;
 
 -- -----------------------------
 -- Clients Table
 -- -----------------------------
-CREATE TABLE IF NOT EXISTS spm_clients (
+CREATE TABLE IF NOT EXISTS ${DB_ABBR}_clients (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -44,14 +46,14 @@ CREATE TABLE IF NOT EXISTS spm_clients (
 );
 
 -- Indexes for fast lookups
-CREATE UNIQUE INDEX IF NOT EXISTS idx_spm_clients_email ON spm_clients(email);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_spm_clients_provider_id ON spm_clients(provider, provider_id);
-CREATE INDEX IF NOT EXISTS idx_spm_clients_role ON spm_clients(role);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_${DB_ABBR}_clients_email ON ${DB_ABBR}_clients(email);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_${DB_ABBR}_clients_provider_id ON ${DB_ABBR}_clients(provider, provider_id);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_clients_role ON ${DB_ABBR}_clients(role);
 
 -- -----------------------------
 -- Admins Table (completely separate from clients)
 -- -----------------------------
-CREATE TABLE IF NOT EXISTS spm_admins (
+CREATE TABLE IF NOT EXISTS ${DB_ABBR}_admins (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -64,14 +66,14 @@ CREATE TABLE IF NOT EXISTS spm_admins (
 );
 
 -- Index for super admins
-CREATE INDEX IF NOT EXISTS idx_spm_admins_super ON spm_admins(super_admin);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_admins_super ON ${DB_ABBR}_admins(super_admin);
 
 -- -----------------------------
 -- Refresh Tokens Table (linked only to clients)
 -- -----------------------------
-CREATE TABLE IF NOT EXISTS spm_refresh_tokens (
+CREATE TABLE IF NOT EXISTS ${DB_ABBR}_refresh_tokens (
     id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES spm_clients(id) ON DELETE CASCADE,
+    client_id INT NOT NULL REFERENCES ${DB_ABBR}_clients(id) ON DELETE CASCADE,
     token VARCHAR(500) NOT NULL,
     token_type VARCHAR(20) NOT NULL DEFAULT 'standard',
     expires_at TIMESTAMP NOT NULL,
@@ -79,29 +81,29 @@ CREATE TABLE IF NOT EXISTS spm_refresh_tokens (
 );
 
 -- Index for fast token lookup
-CREATE UNIQUE INDEX IF NOT EXISTS idx_spm_refresh_token ON spm_refresh_tokens(token);
-CREATE INDEX IF NOT EXISTS idx_spm_refresh_token_client ON spm_refresh_tokens(client_id);
-CREATE INDEX IF NOT EXISTS idx_spm_refresh_token_type ON spm_refresh_tokens(token_type);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_${DB_ABBR}_refresh_token ON ${DB_ABBR}_refresh_tokens(token);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_refresh_token_client ON ${DB_ABBR}_refresh_tokens(client_id);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_refresh_token_type ON ${DB_ABBR}_refresh_tokens(token_type);
 
 -- -----------------------------
 -- Login History Table (linked only to clients)
 -- -----------------------------
-CREATE TABLE IF NOT EXISTS spm_login_history (
+CREATE TABLE IF NOT EXISTS ${DB_ABBR}_login_history (
     id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES spm_clients(id) ON DELETE CASCADE,
+    client_id INT NOT NULL REFERENCES ${DB_ABBR}_clients(id) ON DELETE CASCADE,
     login_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ip_address VARCHAR(50),
     user_agent TEXT
 );
 
 -- Index to speed up recent login queries
-CREATE INDEX IF NOT EXISTS idx_spm_login_history_client ON spm_login_history(client_id);
-CREATE INDEX IF NOT EXISTS idx_spm_login_history_date ON spm_login_history(login_at DESC);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_login_history_client ON ${DB_ABBR}_login_history(client_id);
+CREATE INDEX IF NOT EXISTS idx_${DB_ABBR}_login_history_date ON ${DB_ABBR}_login_history(login_at DESC);
 
 -- -----------------------------
 -- Insert default admin with permissions array [4,3,2] as JSONB
 -- -----------------------------
-INSERT INTO spm_admins (username, email, password, super_admin, permissions, role)
+INSERT INTO ${DB_ABBR}_admins (username, email, password, super_admin, permissions, role)
 VALUES (
     'speedmate',
     'admin@speedmate.com',
@@ -114,7 +116,7 @@ VALUES (
 -- -----------------------------
 -- Insert default client
 -- -----------------------------
-INSERT INTO spm_clients (username, email, password, role, provider, is_verified)
+INSERT INTO ${DB_ABBR}_clients (username, email, password, role, provider, is_verified)
 VALUES (
     'client',
     'client@speedmate.com',
@@ -126,4 +128,4 @@ VALUES (
 
 EOSQL
 
-echo "✅ All old spm_ tables dropped and new optimized tables (spm_clients + spm_admins separate) created successfully!"
+echo "✅ All old ${DB_ABBR}_ tables dropped and new optimized tables (${DB_ABBR}_clients + ${DB_ABBR}_admins separate) created successfully!"
