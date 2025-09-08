@@ -4,6 +4,8 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 dotenv.config();
+import cookieParser from "cookie-parser";
+
 import { pool } from "./configs/database.js";
 import ClientAuthRoutes from "./routes/auth.routes.js";
 import adminAuthRoutes from "./admin/routes/auth.routes.js";
@@ -20,6 +22,7 @@ app.use(cors(corsConfig));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 /** Admin Routes */
 app.use("/api/speedmate-admin/auth", adminAuthRoutes);

@@ -5,7 +5,6 @@ import { postDatas } from "../services/api.service";
 import { setStorage, removeStorage, getStorage } from "../utils/storage.handler";
 import { jwtDecode } from "jwt-decode";
 import type { User } from "../interfaces/userInterface";
-import { runCatchErrorLogger, runTryErrorLogger, throwCatchError, throwTryError } from "../utils/response.handler";
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -17,57 +16,61 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const token = getStorage("authToken");
-      const storedUser = getStorage("authUser");
-
-      if (token) {
-        try {
-          const decoded: DecodedToken = jwtDecode(token);
-          const now = Date.now() / 1000;
-
-          if (decoded.exp > now) {
-            // Token still valid
-            setAccessToken(token);
-            setIsAuthenticated(true);
-
-            if (storedUser) {
-              setUser(JSON.parse(storedUser));
+      try {
+        const token = getStorage("authToken");
+        const storedUser = getStorage("authUser");
+  
+        if (token) {
+          try {
+            const decoded: DecodedToken = jwtDecode(token);
+            const now = Date.now() / 1000;
+  
+            if (decoded.exp > now) {
+              // Token still valid
+              setAccessToken(token);
+              setIsAuthenticated(true);
+  
+              if (storedUser) {
+                setUser(JSON.parse(storedUser));
+              } else {
+                const newUser = {
+                  email: decoded.email,
+                  role: decoded.role,
+                  username: decoded.username,
+                };
+                setUser(newUser);
+                setStorage("authUser", JSON.stringify(newUser));
+              }
             } else {
-              const newUser = {
-                email: decoded.email,
-                role: decoded.role,
-                username: decoded.username,
-              };
-              setUser(newUser);
-              setStorage("authUser", JSON.stringify(newUser));
+              // Token expired → refresh
+              const response = await postDatas({ url: "/auth/refresh-access-token" });
+  
+              if (!response?.data) {
+                logout();
+              } else {
+                setStorage("authToken", response.data.accessToken);
+                setStorage("authUser", JSON.stringify(response.data.user));
+                setAccessToken(response.data.accessToken);
+                setIsAuthenticated(true);
+                setUser(response.data.user);
+              }
             }
-          } else {
-            // Token expired → refresh
-            const response = await postDatas({ url: "/auth/refresh-access-token" });
-            if(!response || !response.data){
-              throwTryError(response);
-              runTryErrorLogger(response);
-              logout();
-              return;
-            }
-            setStorage("authToken", response.accessToken);
-            setStorage("authUser", JSON.stringify(response.user));
-            setAccessToken(response.accessToken);
-            setIsAuthenticated(true);
-            setUser(response.user);
+          } catch (error: any) {
+            console.error("Token decode or refresh failed:", error);
+            logout();
           }
-        } catch(error:any) {  
-          runCatchErrorLogger(error);
-          throwCatchError(error);
-          logout();
         }
+      } catch (error) {
+        console.error("Initialize auth failed:", error);
+        logout();
+      } finally {
+        setInitialized(true); // ✅ always set initialized
       }
-
-      setInitialized(true);
     };
-
+  
     initializeAuth();
   }, []);
+  
 
   /**
    * Login Process | Authentication Global Provider
