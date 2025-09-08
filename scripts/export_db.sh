@@ -2,13 +2,15 @@
 # scripts/refresh_seed.sh
 
 # Name of your Postgres container (must match docker-compose.yml)
-CONTAINER_NAME=db_speedmate
-DB_USER=speedmate
-DB_NAME=db_speedmate
-DB_PASSWORD=speedmate19!
+APP_NAME="speedmate"  
+DB_ABBR="spm"
+CONTAINER_NAME=db_${APP_NAME}
+DB_USER=${DB_ABBR}
+DB_NAME=db_${APP_NAME}
+DB_PASSWORD=${APP_NAME}19!
 
 #OUTPUT FILE
-OUTPUT_FILE=./outputs/speedmate.sql
+OUTPUT_FILE=./outputs/${APP_NAME}.sql
 
 echo "📦 Exporting database '$DB_NAME' from container '$CONTAINER_NAME'..."
 

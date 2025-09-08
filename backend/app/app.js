@@ -1,4 +1,5 @@
 import express from "express";
+import { config } from "./configs/index.js";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -25,8 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 /** Admin Routes */
-app.use("/api/speedmate-admin/auth", adminAuthRoutes);
-app.use("/api/speedmate-admin/mailer", adminMailRoutes);
+app.use("/api/" + config.app.appName + "-admin/auth", adminAuthRoutes);
+app.use("/api/" + config.app.appName + "-admin/mailer", adminMailRoutes);
 
 /** Client Routes */
 app.use("/api/auth", ClientAuthRoutes);
@@ -36,12 +37,12 @@ app.use("/api/mailer", ClientMailRoutes);
 app.use("/api", logsRoutes);
 
 /** Index Route */
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to SpeedMate | The number 1 website Performance booster and Web Monitoring Service" });
+app.get("/", (_, res) => {
+  res.json({ message: "Welcome to " + config.app.coolName + " | The number 1 website Performance booster and Web Monitoring Service" });
 });
 
 /** Test API Endpoint */
-app.get("/api-test", (req, res) => {
+app.get("/api-test", (_, res) => {
   try {
     res.json("Backend API Connection Successful");
   } catch (error) {
@@ -51,7 +52,7 @@ app.get("/api-test", (req, res) => {
 });
 
 /** Test DB connection */
-app.get("/db-test", async (req, res) => {
+app.get("/db-test", async (_, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
     res.json({ db_time: result.rows[0], message: "Database connection successful" });

@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../../hooks/useNotification";
 import TextInput from "../../../components/TextInput"; 
 import { useAuthContext } from "../../../hooks/useAuth";
+import useAppContext from "../../../hooks/useApp";
 
 function Login() {
   const { login } = useAuthContext();
+  const { configs } = useAppContext();
   const navigate = useNavigate();
   const { notify } = useNotification();
 
@@ -49,7 +51,7 @@ function Login() {
       }
 
       notify && notify(message, "success");
-      setTimeout(() => navigate("/speedmate-admin/dashboard"), 1000);
+      setTimeout(() => navigate(`/${configs.appName}-admin/dashboard`), 1000);
     } catch (error: any) {
       setLoading(false);
       notify && notify(error.message || "Login failed", "error");

@@ -25,5 +25,11 @@ export const config = {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASS
         }
+    },
+    app:{
+        appName: process.env.APP_NAME,
+        coolName: process.env.APP_COOL_NAME,
+        abbr: process.env.DB_ABBR,
+        emailHeader: process.env.EMAIL_HEADER
     }
 }
