@@ -8,7 +8,7 @@
 APP_NAME="speedmate"  
 DB_ABBR="spm"
 DB_NAME="db_${APP_NAME}"
-DB_USER="${DB_ABBR}"
+DB_USER="${APP_NAME}"
 DB_PASSWORD="${APP_NAME}19!"
 DB_CONTAINER="db_${APP_NAME}"
 DB_HOST="postgres"

@@ -40,7 +40,7 @@ services:
       POSTGRES_DB: db_speedmate
     volumes:
       - db_speedmate_data:/var/lib/postgresql/data
-      - ./scripts/outputs/speedmate.sql:/docker-entrypoint-initdb.d/speedmate.sql
+      - ./scripts/init/speedmate.sql:/docker-entrypoint-initdb.d/speedmate.sql
 
 volumes:
   db_speedmate_data:
