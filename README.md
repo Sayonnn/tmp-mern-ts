@@ -1,6 +1,7 @@
 # speedmate
 Full template of MERN with the needed dependencies for development. *** run npm install on frontend and backend folders ***
 Github: https://github.com/Sayonnn/speedmate.git
+
 ## database credentials
 ``` 
 docker run --name db_speedmate \
@@ -23,12 +24,22 @@ docker run --name db_speedmate \
 
 ## mail credentials
 ```
-Email: support@judydropship.com
-Email: noreply@judydropship.com
+Email: support@speedmate.com
+Email: noreply@speedmate.com
 Password: JudyDropship@19!
 ```
 
 ## steps after cloning
+```
+docker compose up --build
+./scripts/create_tables.sh
+cd frontend > npm i > npm run dev
+```
+
+## steps before commit
+```
+./scripts/export_db.sh
+```
 
 ## NOTES
 The structure of this project is as follows:
