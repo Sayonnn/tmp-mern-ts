@@ -13,7 +13,7 @@ export const generateAccessToken = (user) => {
     }
 
     return jwt.sign(
-        {id: user.id, email: user.email, role: user.role}, 
+        {id: user.id, email: user.email, role: user.role,username: user.username,created_at: user.created_at,permissions: user.permissions || [], super_admin: user.super_admin || false}, 
         config.jwt.secret, 
         {expiresIn: config.jwt.access_token_expires_in, algorithm: config.jwt.algorithm}
     );
@@ -31,7 +31,7 @@ export const generateRefreshToken = (user) => {
     }
 
     return jwt.sign(
-      { id: user.id, email:user.email, role:user.role }, 
+      { id: user.id, email:user.email, role:user.role,username:user.username,created_at:user.created_at,permissions:user.permissions || [], super_admin:user.super_admin || false }, 
       config.jwt.secret, 
       { expiresIn: config.jwt.refresh_token_expires_in, algorithm: config.jwt.algorithm } 
     );
@@ -44,20 +44,4 @@ export const generateRefreshToken = (user) => {
  */
 export const verifyToken = (token) => {
     return jwt.verify(token, config.jwt.secret);
-}
-
-/**
- * Generate access and refresh tokens for a user
- * @param {Object} user - The user object
- * @returns {Object} - The access and refresh tokens
- */
-export const generateTokens = (user) => {
-    if(!user) {
-        throw new Error("User not found");
-    }
-
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
-    return { accessToken, refreshToken };
 }

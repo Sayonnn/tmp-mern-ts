@@ -1,6 +1,6 @@
 import { errorResponse } from "../../utils/response.js";
 import { registerAdmin, loginAdmin } from "../services/auth.service.js";
-import { generateAccessToken } from "../../utils/jwt.js";
+import { generateAccessToken, verifyToken } from "../../utils/jwt.js";
 import { successResponse } from "../../utils/response.js";
 import { saveCookie } from "../../utils/cookies.js";
 
@@ -113,3 +113,27 @@ export const refreshAdminAccessToken = async (req, res) => {
       return errorResponse(res, 403, "Refresh failed. Please log in again.");
     }
 }
+
+/**
+ * Refresh Admin Information in exchange of access token
+ */
+export const refreshAdminInformation = async (req, res) => {
+  try {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+
+    if (!accessToken) {
+      return errorResponse(res, 401, "Access token missing. Please log in again.");
+    }
+
+    /** Verify access token */
+    const decoded = verifyToken(accessToken);
+
+    return successResponse(res, "Refresh successful", {
+      user: { id: decoded.id, email: decoded.email,username: decoded.username, role: decoded.role,permissions: decoded.permissions,super_admin: decoded.super_admin,created_at: decoded.created_at }
+    });
+  } catch (err) {
+    console.error("Refresh Token Error:", err);
+
+    return errorResponse(res, 403, "Refresh failed. Please log in again.");
+  }
+};

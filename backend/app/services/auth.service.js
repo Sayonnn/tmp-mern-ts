@@ -52,7 +52,7 @@ export async function registerClient(email, password, username) {
  * @returns {Object} user, accessToken, refreshToken
  */
 export async function loginClient(username, password) {
-  const checkUserSql = "SELECT id, email, password, role, username FROM spm_clients WHERE username = $1";
+  const checkUserSql = "SELECT id, email, password, role, username, created_at FROM spm_clients WHERE username = $1";
   const existing = await startQuery(checkUserSql, [username]);
 
   if (existing.rows.length === 0) {

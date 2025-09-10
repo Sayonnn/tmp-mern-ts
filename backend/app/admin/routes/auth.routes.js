@@ -1,5 +1,5 @@
 import express from 'express'
-import { startAdminRegistration, startAdminLogin, refreshAdminAccessToken } from "../controllers/auth.controller.js";
+import { startAdminRegistration, startAdminLogin, refreshAdminAccessToken, refreshAdminInformation } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -11,5 +11,8 @@ router.post("/login", startAdminLogin);
 
 /** Refresh Token (admin only) */
 router.post("/refresh-access-token", refreshAdminAccessToken);
+
+/** Refresh Admin Information (admin only) */
+router.post("/refresh-admin-information", refreshAdminInformation);
 
 export default router;

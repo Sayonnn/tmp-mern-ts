@@ -48,7 +48,7 @@ export const registerAdmin = async (
 
 export const loginAdmin = async (username, password) => {
     /** Check Username Exists */
-    const checkUserSql = "SELECT id, email, password, permissions, super_admin, username, role FROM spm_admins WHERE username = $1";
+    const checkUserSql = "SELECT id, email, password, permissions, super_admin, username, role, created_at FROM spm_admins WHERE username = $1";
     const existing = await startQuery(checkUserSql, [username]);
   
     if (existing.rows.length === 0) {

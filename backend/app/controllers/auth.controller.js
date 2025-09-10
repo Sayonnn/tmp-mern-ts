@@ -94,5 +94,30 @@ export const refreshClientAccessToken = async (req, res) => {
     console.error("Refresh Token Error:", err);
 
     return errorResponse(res, 403, "Refresh failed. Please log in again.");
+  } 
+};
+
+/**
+ * Refresh Client Information in exchange of access token
+ */
+export const refreshClientInformation = async (req, res) => {
+  try {
+    const accessToken = req.headers['authorization'].split(' ')[1];
+
+
+    if (!accessToken) {
+      return errorResponse(res, 401, "Access token missing. Please log in again.");
+    }
+    
+    /** Verify access token */
+    const decoded = verifyToken(accessToken);
+    
+    return successResponse(res, "Refresh successful", {
+      user: { id: decoded.id, email: decoded.email,username: decoded.username, role: decoded.role,created_at: decoded.created_at }
+    });
+  } catch (err) {
+    console.error("Refresh Token Error:", err);
+
+    return errorResponse(res, 403, "Refresh failed. Please log in again.");
   }
 };
