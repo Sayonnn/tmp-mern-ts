@@ -1,17 +1,9 @@
+import { cookieConfig } from "../configs/cookie.js";
+
 export const saveCookie = (res, name, value) => {
-    res.cookie(name, value, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000 /* 7 days */
-      });
+    res.cookie(name, value, cookieConfig);
 }
 
 export const removeCookie = (res, name) => {
-    res.cookie(name, "", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 0
-    });
+    res.clearCookie(name, cookieConfig);
 }
