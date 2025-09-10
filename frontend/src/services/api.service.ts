@@ -50,7 +50,6 @@ apiService.interceptors.response.use(
       try {
         // Call refresh token endpoint (refresh token stored in HttpOnly cookie)
         const { data } = await apiService.post("/auth/refresh-access-token");
-
         // Save new token
         localStorage.setItem("authToken", data.accessToken);
 

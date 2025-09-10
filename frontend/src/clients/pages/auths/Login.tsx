@@ -2,7 +2,7 @@ import { useState, type SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../../hooks/useNotification";
 import TextInput from "../../../components/TextInput";
-import { useAuthContext } from "../../../hooks/useAuth";
+import useAuthContext from "../../../hooks/useAuth";
 
 function Login() {
   const { login } = useAuthContext();

@@ -1,6 +1,6 @@
 // ProtectedRoute.tsx
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuth";
+import useAuthContext from "../hooks/useAuth";
 import type { ProtectedRouteProps } from "../interfaces/authInterface";
 import useAppContext from "../hooks/useApp";
 

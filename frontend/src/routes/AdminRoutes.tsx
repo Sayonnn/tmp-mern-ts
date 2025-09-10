@@ -3,7 +3,7 @@ import Login from "../admin/pages/auth/Login";
 import Dashboard from "../admin/pages/Dashboard";
 import ProtectedRoute from "../middlewares/ProtectedRoute";
 import NotFound from "../pages/NotFound";
-import { useAuthContext } from "../hooks/useAuth";
+import useAuthContext from "../hooks/useAuth";
 
 function AdminRoutes() {
   const { isAuthenticated } = useAuthContext();

@@ -7,20 +7,20 @@ import { jwtDecode } from "jwt-decode";
 import type { User } from "../interfaces/userInterface";
 import useAppContext from "../hooks/useApp";
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [initialized, setInitialized] = useState<boolean>(false);
   const { configs } = useAppContext();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null); 
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const token = getStorage("authToken");
-        const storedUser = getStorage("authUser");
+        const token = getStorage("authToken"); /** valid 15 minutes */
+        const storedUser = getStorage("authUser"); /** should be removed */
    
         if (token) {
           try {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                   username: decoded.username,
                 };
                 setUser(newUser);
-                setStorage("authUser", JSON.stringify(newUser));
+                setStorage("authUser", JSON.stringify(newUser)); /** should be removed */
               }
             } else {
               // Token expired → refresh
@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               if (!response?.data) {
                 logout();
               } else {
-                setStorage("authToken", response.data.accessToken);
-                setStorage("authUser", JSON.stringify(response.data.user));
+                setStorage("authToken", response.data.accessToken); 
+                setStorage("authUser", JSON.stringify(response.data.user)); /** should be removed */
                 setAccessToken(response.data.accessToken);
                 setIsAuthenticated(true);
                 setUser(response.data.user);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Initialize auth failed:", error);
         logout();
       } finally {
-        setInitialized(true); // ✅ always set initialized
+        setInitialized(true); 
       }
     };
   
@@ -86,11 +86,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const response = await postDatas({
         url: role === "admin" ? `/${configs.appName}-admin/auth/login` : "/auth/login",
-        data: { username, password },
+        data: { username, password }, 
       });
 
-      setStorage("authToken", response.accessToken);
-      setStorage("authUser", JSON.stringify(response.user));
+      setStorage("authToken", response.accessToken); 
+      setStorage("authUser", JSON.stringify(response.user)); /** should be removed */
       setAccessToken(response.accessToken);
       setIsAuthenticated(true);
       setUser(response.user);
@@ -101,9 +101,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  /** Refresh Data Process | Authentication Global Provider */
+  const refreshData = async (role:string) => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  /**
+   * Logout Process | Authentication Global Provider
+   */
   const logout = () => {
-    removeStorage("authToken");
-    removeStorage("authUser");
+    removeStorage("authToken"); 
+    removeStorage("authUser"); /** should be removed */
     setAccessToken(null);
     setIsAuthenticated(false);
     setUser(null);
@@ -118,3 +130,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+export { AuthContext, AuthProvider };

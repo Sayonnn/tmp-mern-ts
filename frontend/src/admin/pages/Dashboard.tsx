@@ -1,4 +1,4 @@
-import { useAuthContext } from "../../hooks/useAuth";
+import useAuthContext from "../../hooks/useAuth";
 
 function Dashboard() {
     const { user } = useAuthContext();
