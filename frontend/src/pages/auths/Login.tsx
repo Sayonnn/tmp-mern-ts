@@ -4,7 +4,7 @@ import { useNotification } from "../../hooks/useNotification";
 import TextInput from "../../components/TextInput";
 import useAuthContext from "../../hooks/useAuth";
 
-function Login() {
+function Login() {  
   const { login } = useAuthContext();
   const navigate = useNavigate();
   const { notify } = useNotification();

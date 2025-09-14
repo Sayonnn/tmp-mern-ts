@@ -3,7 +3,7 @@ import type { User } from "./userInterface";
 export interface loginProcessArgsProps {
     username: string;
     password: string;
-    role: string;
+    role?: string; 
 }
 
 export interface loginProcessResponseProps {

@@ -5,7 +5,7 @@ class AdminService {
   private static apiUrl:string = import.meta.env.VITE_API_URL;
   private static appName:string = import.meta.env.VITE_APP_NAME;
 
-  private constructor() {}
+  private constructor() {} 
 
   public static getInstance(): AdminService {
     if (!AdminService.instance) {
@@ -18,8 +18,8 @@ class AdminService {
   public auth = {
     login: (data: { username: string; password: string }) => postDatas({ url: `${AdminService.apiUrl}/${AdminService.appName}-admin/auth/login`, data }),
     logout: () => postDatas({ url: `${AdminService.apiUrl}/${AdminService.appName}-admin/auth/logout` }),
-    signup:() => "",
-    forgotPassword:() => "",
+    signup:() => null,
+    forgotPassword:() => null,
     refreshToken: () => postDatas({ url: `${AdminService.apiUrl}/${AdminService.appName}-admin/auth/refresh-access-token` }),
     refreshInformation: () => postDatas({ url: `${AdminService.apiUrl}/${AdminService.appName}-admin/auth/refresh-admin-information` }),
   };
