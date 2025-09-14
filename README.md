@@ -57,12 +57,12 @@ cd frontend && npm i && npm run dev
 ## 🔄 Reusing the Project
 
 1. Update frontend env.development and env.production
-2. Update database name on \[ scripts/create\_tables.sh ] and \[ scripts/export\_db.sh ] (APP\_NAME | DB\_ABBR)
+2. Update database name on [ scripts/create_tables.sh ] and [ scripts/export_db.sh ] (APP_NAME | DB_ABBR)
 3. Update backend env or global naming
-4. Update Dockerfiles ( if needed )
-5. Update api.service.ts ( if needed )
-6. Update docker-compose.yml
-7. Update .github/workflows/main.yml
+4. Update Dockerfiles ( optional )
+5. Update api.service.ts ( optional )
+6. Update docker-compose.yml ( optional )
+7. Update .github/workflows/main.yml ( optional )
 
 ---
 

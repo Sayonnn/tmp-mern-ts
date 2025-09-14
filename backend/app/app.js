@@ -8,12 +8,8 @@ dotenv.config();
 import cookieParser from "cookie-parser";
 
 import { pool } from "./configs/database.js";
-import ClientAuthRoutes from "./routes/auth.routes.js";
-import adminAuthRoutes from "./admin/routes/auth.routes.js";
-import adminMailRoutes from "./admin/routes/mail.routes.js";
-import ClientMailRoutes from "./routes/mail.routes.js";
-import logsRoutes from "./routes/log.routes.js";
 import { corsConfig } from "./configs/cors.js";
+import indexRoutes from "./routes/index.routes.js";
 
 const app = express();
 
@@ -25,16 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/** Admin Routes */
-app.use("/api/" + config.app.appName + "-admin/auth", adminAuthRoutes);
-app.use("/api/" + config.app.appName + "-admin/mailer", adminMailRoutes);
-
-/** Client Routes */
-app.use("/api/auth", ClientAuthRoutes);
-app.use("/api/mailer", ClientMailRoutes);
-
-/** Monitoring Routes */
-app.use("/api", logsRoutes);
+/** Index Routes */
+app.use("/api", indexRoutes);
 
 /** Index Route */
 app.get("/", (_, res) => {
