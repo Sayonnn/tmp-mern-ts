@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 
-const SALT_ROUNDS = 10; // adjust for security/performance tradeoff
+const SALT_ROUNDS = 10; 
 
 const UserSchema = new mongoose.Schema(
   {
