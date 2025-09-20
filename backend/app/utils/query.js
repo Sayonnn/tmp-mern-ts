@@ -1,22 +1,24 @@
-import { pool } from "../configs/database.js";
-
-/** 
- * Start a database query
- * @param {string} sql - The SQL query to execute
- * @param {Array} params - The parameters for the query
- * @returns {Promise} - A promise that resolves to the result of the query
-*/
-export const startQuery = (sql, params = []) => {
-  if (!sql) {
-    return Promise.reject(new Error("Query is required"));
+export const startQuery = async (model, action, query = {}, update = {}) => {
+  if (!model || !action) {
+    throw new Error("Model and action are required");
   }
 
-  return new Promise((resolve, reject) => {
-    pool.query(sql, params, (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(result);
-    });
-  });
+  try {
+    switch (action) {
+      case "find":
+        return await model.find(query);
+      case "findOne":
+        return await model.findOne(query);
+      case "create":
+        return await model.create(query);
+      case "updateOne":
+        return await model.updateOne(query, update);
+      case "deleteOne":
+        return await model.deleteOne(query);
+      default:
+        throw new Error("Unsupported action");
+    }
+  } catch (err) {
+    throw err;
+  }
 };
