@@ -1,29 +1,18 @@
-version: "3.9"
-
 services:
   backend:
     build: ./backend
     container_name: sayonph-backend-service
-    # image: dualnoiz/sayonph-backend:latest
     ports:
-      - "5001:5000"  # remove or adjust for production
+      - "5001:5000"  # local:container
     environment:
       - PORT=5000
-      - FRONTEND_PORT=8001
       - NODE_ENV=production
-      - DB_USER=sayonph           # optional for MongoDB auth
-      - DB_PASSWORD=sayonph19!    # optional for MongoDB auth
-      - DB_NAME=db_sayonph
-      - DB_HOST=mongodb            # service name inside Docker network
-      - DB_PORT=27017
-    depends_on:
-      - mongodb
+      - MONGO_URI=mongodb+srv://db_sayonph:sayonph19!@cluster0.zjjwqmv.mongodb.net/sayonph
 
   frontend:
     build: ./frontend
     container_name: sayonph-frontend-service
     ports:
-      - "8001:80"   # remove in production
+      - "8001:80" # local:container
     depends_on:
       - backend
-
