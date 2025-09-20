@@ -1,4 +1,4 @@
-name: speedmate Docker CI/CD
+name: sayonph Docker CI/CD
 
 on:
   push:
@@ -22,13 +22,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Backend Docker Image
-        run: docker build -t dualnoiz/speedmate-backend:latest ./backend
+        run: docker build -t dualnoiz/sayonph-backend:latest ./backend
 
       - name: Build Frontend Docker Image
-        run: docker build -t dualnoiz/speedmate-frontend:latest ./frontend
+        run: docker build -t dualnoiz/sayonph-frontend:latest ./frontend
 
       - name: Push Backend Docker Image
-        run: docker push dualnoiz/speedmate-backend:latest
+        run: docker push dualnoiz/sayonph-backend:latest
 
       - name: Push Frontend Docker Image
-        run: docker push dualnoiz/speedmate-frontend:latest
+        run: docker push dualnoiz/sayonph-frontend:latest

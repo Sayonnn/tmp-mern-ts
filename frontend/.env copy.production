@@ -2,13 +2,13 @@
 VITE_API_URL=https://api.yourdomain.com
 
 # App Branding
-VITE_APP_NAME=speedmate
-VITE_APP_COOL_NAME=SpeedMate
+VITE_APP_NAME=sayonph
+VITE_APP_COOL_NAME=Sayonph
 VITE_APP_TAGLINE=The Ultimate Guard & Security Platform
-VITE_APP_DESCRIPTION=SpeedMate helps businesses secure their digital assets with advanced monitoring, protection, and compliance tools.
+VITE_APP_DESCRIPTION=Sayonph helps businesses secure their digital assets with advanced monitoring, protection, and compliance tools.
 
 # SEO
-VITE_APP_KEYWORDS=SpeedMate, Security, Cybersecurity, Monitoring, Compliance, Data Protection, Threat Detection, Digital Protection
+VITE_APP_KEYWORDS=Sayonph, Security, Cybersecurity, Monitoring, Compliance, Data Protection, Threat Detection, Digital Protection
 VITE_APP_AUTHOR=SayonPH
 VITE_APP_URL=https://yourdomain.com
-VITE_APP_IMAGE=https://yourdomain.com/assets/speedmate.svg
+VITE_APP_IMAGE=https://yourdomain.com/assets/sayonph.svg

@@ -2,6 +2,8 @@
 
 # Sayon PH 🇵🇭 | Professional and extraordinary web portfolio
 
+Uses MERN + TS + Docker Stack
+
 📂 **GitHub Repo:** [sayonph](https://github.com/Sayonnn/sayonph.git)
 
 ---
@@ -23,7 +25,7 @@
 ```txt
 Email: support@sayonph.com
 Email: noreply@sayonph.com
-Password: JudyDropship@19!
+Password: Sayonph@19!
 ```
 
 ---

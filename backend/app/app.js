@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 
-import { pool } from "./configs/database.js";
 import { corsConfig } from "./configs/cors.js";
 import indexRoutes from "./routes/index.routes.js";
 
@@ -26,7 +25,12 @@ app.use("/api", indexRoutes);
 
 /** Index Route */
 app.get("/", (_, res) => {
-  res.json({ message: "Welcome to " + config.app.coolName + " | The number 1 website Performance booster and Web Monitoring Service" });
+  res.json({
+    message:
+      "Welcome to " +
+      config.app.coolName +
+      " | The number 1 website Performance booster and Web Monitoring Service",
+  });
 });
 
 /** Test API Endpoint */
@@ -35,15 +39,22 @@ app.get("/api-test", (_, res) => {
     res.json("Backend API Connection Successful");
   } catch (error) {
     console.error("API Error:", error);
-    res.status(500).json({ error: error.message});
+    res.status(500).json({ error: error.message });
   }
 });
 
 /** Test DB connection */
 app.get("/db-test", async (_, res) => {
   try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({ db_time: result.rows[0], message: "Database connection successful" });
+    // Example: list all database names
+    const admin = mongoose.connection.db.admin();
+    const result = await admin.listDatabases();
+
+    res.json({
+      db_time: new Date(),
+      databases: result.databases.map((db) => db.name),
+      message: "MongoDB connection successful",
+    });
   } catch (err) {
     console.error("DB Error:", err);
     res.status(500).json({ error: "Database connection failed" });
