@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose"; // needed for /db-test
 import { config } from "./configs/index.js";
 import morgan from "morgan";
 import cors from "cors";
@@ -9,8 +10,12 @@ import cookieParser from "cookie-parser";
 
 import { corsConfig } from "./configs/cors.js";
 import indexRoutes from "./routes/index.routes.js";
+import connectDB from "./configs/database.js";
 
 const app = express();
+
+/** Connect to MongoDB */
+connectDB();
 
 /** Middlewares */
 app.use(morgan("dev"));
@@ -23,36 +28,25 @@ app.use(cookieParser());
 /** Index Routes */
 app.use("/api", indexRoutes);
 
-/** Index Route */
+/** Root Route */
 app.get("/", (_, res) => {
   res.json({
-    message:
-      "Welcome to " +
-      config.app.coolName +
-      " | The number 1 website Performance booster and Web Monitoring Service",
+    message: `Welcome to ${config.app.coolName} | The number 1 website Performance booster and Web Monitoring Service`,
   });
 });
 
 /** Test API Endpoint */
 app.get("/api-test", (_, res) => {
-  try {
-    res.json("Backend API Connection Successful");
-  } catch (error) {
-    console.error("API Error:", error);
-    res.status(500).json({ error: error.message });
-  }
+  res.json({ message: "Backend API Connection Successful" });
 });
 
 /** Test DB connection */
 app.get("/db-test", async (_, res) => {
   try {
-    // Example: list all database names
-    const admin = mongoose.connection.db.admin();
-    const result = await admin.listDatabases();
+    connectDB();
 
     res.json({
       db_time: new Date(),
-      databases: result.databases.map((db) => db.name),
       message: "MongoDB connection successful",
     });
   } catch (err) {
