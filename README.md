@@ -23,18 +23,18 @@ cd backend && npm i
 
 ## 🔄 Reusing the Project
 
-1. Update frontend env.development and env.production
-2. Update backend .env
-3. rename project sayonph -> desired project name
-4. Update Dockerfiles ( optional )
-5. Update docker-compose.yml ( optional )
-6. Update .github/workflows/main.yml ( optional )
-7. provide own logo
+1. Copy .env-copy to .env ( frontend | backend )
+2. Update frontend env.development and env.production
+3. Update backend .env
+4. rename project sayonph -> desired project name
+5. Update Dockerfiles ( optional )
+6. Update docker-compose.yml ( optional )
+7. Update .github/workflows/main.yml ( optional )
+8. provide own logo
 
 ---
 
----
-## Before final commit
+## 📝 Before final commit
 
 1. git rm -r --cached backend/.env
 2. git rm -r --cached frontend/.env
