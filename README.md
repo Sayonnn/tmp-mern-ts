@@ -8,31 +8,24 @@ MERN template ( with auth ) + TS + Docker | use if you want built in auth with m
 
 ---
 
-## 🛠️ Setup Steps
+## 🔄 Reusing the Project
 
-### After Cloning ( REQUIRED )
-
+1. Copy .env-copy to .env ( frontend | backend )
+2. Update frontend .env
+3. Update backend .env ( especialy mongo_uri )
+4. rename project sayonph -> desired project name ( start by searching sayonph )
+5. Update Dockerfiles ( optional )
+6. Update docker-compose.yml ( optional )
+7. Update .github/workflows/main.yml ( optional )
+8. provide own logo
+9. create your own user ( postman ) ( api/auth/register | api/appname-auth/register )
+    
 ```bash
 docker compose up --build
 # try if there is an issue after docker
 cd frontend && npm i 
 cd backend && npm i
 ```
-
----
-
-## 🔄 Reusing the Project
-
-1. Copy .env-copy to .env ( frontend | backend )
-2. Update frontend .env
-3. Update backend .env ( especialy mongo_uri )
-4. rename project sayonph -> desired project name
-5. Update Dockerfiles ( optional )
-6. Update docker-compose.yml ( optional )
-7. Update .github/workflows/main.yml ( optional )
-8. provide own logo
-9. create your own user ( postman )
-
 ---
 
 ## 📝 Before final commit
