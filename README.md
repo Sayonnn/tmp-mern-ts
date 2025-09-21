@@ -4,7 +4,7 @@
 
 MERN template ( with auth ) + TS + Docker | use if you want built in auth with mongodb
 
-📂 **GitHub Repo:** [sayonph](https://github.com/Sayonnn/sayonph.git)
+📂 **GitHub Repo:** [tmp-mern-ts](https://github.com/Sayonnn/tmp-mern-ts.git)
 
 ---
 
