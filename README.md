@@ -1,6 +1,6 @@
 ---
 
-# Sayon PH 🇵🇭 | Professional web portfolio
+# Sayon PH 🇵🇭 | MERN TS DOCKER TEMPLATE
 
 MERN template ( with auth ) + TS + Docker | use if you want built in auth with mongodb
 
