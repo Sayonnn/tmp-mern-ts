@@ -31,6 +31,7 @@ cd backend && npm i
 6. Update docker-compose.yml ( optional )
 7. Update .github/workflows/main.yml ( optional )
 8. provide own logo
+9. create your own user ( postman )
 
 ---
 
@@ -41,3 +42,10 @@ cd backend && npm i
 3. git rm -r --cached backend/node_modules
 4. git rm -r --cached frontend/node_modules
 5. cp .env .env-copy ( frontend | backend )
+
+---
+
+## 📝 Notes
+
+1. No 2FA yet ( TOTP )
+2. No forgot password feature
