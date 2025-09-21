@@ -29,6 +29,7 @@ cd backend && npm i
 4. Update Dockerfiles ( optional )
 5. Update docker-compose.yml ( optional )
 6. Update .github/workflows/main.yml ( optional )
+7. provide own logo
 
 ---
 
