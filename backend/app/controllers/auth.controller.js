@@ -9,7 +9,7 @@ import { saveCookie } from "../utils/cookies.js";
  * @returns {Object} user, accessToken, refreshToken
  */
 export const startClientRegistration = async (req, res) => {
-    try {
+    try { 
         const { email, password, username } = req.body;
     
         if (!email || !password || !username) {

@@ -1,74 +1,85 @@
-import { startQuery } from "../utils/query.js";
+import User from "../models/User.model.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
-import { hashPassword, comparePassword } from "../utils/hash.js";
 
-/** 
+/**
  * Register a new client
- * @param {string} email 
+ * @param {string} email
  * @param {string} password
+ * @param {string} username
  * @returns {Object} user, accessToken, refreshToken
- * NOTE: prevent duplicate email and username
  */
-export async function registerClient(email, password, username) {
-  // Check if email already exists
-  const checkEmailSql = "SELECT id FROM spm_clients WHERE email = $1";
-  const existingEmail = await startQuery(checkEmailSql, [email]);
-
-  if (existingEmail.rows.length > 0) {
+export const registerClient = async (email, password, username) => {
+  // Check if email exists
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
     throw { field: "email", message: "This email is already registered." };
   }
 
-  const checkUsernameSql = "SELECT id FROM spm_clients WHERE username = $1";
-  const existingUsername = await startQuery(checkUsernameSql, [username]);
-
-  if (existingUsername.rows.length > 0) {
+  // Check if username exists
+  const existingUsername = await User.findOne({ username });
+  if (existingUsername) {
     throw { field: "username", message: "This username is already registered." };
   }
 
-  /** Hash Password */
-  const hashedPassword = await hashPassword(password);
+  // Create new client (role = 'client')
+  const client = new User({
+    email,
+    password, // will be hashed by schema pre-save hook
+    username,
+    role: "client",
+  });
 
-  /** Save Client (force role = 'client') */
-  const sql = `
-    INSERT INTO spm_clients (email, password, username, role)
-    VALUES ($1, $2, $3, 'client')
-    RETURNING id, email, role, username, created_at
-  `;
-  const params = [email, hashedPassword, username];
-  const result = await startQuery(sql, params);
-  const user = result.rows[0];
+  await client.save();
 
-  /** Generate Tokens */
+  // Prepare safe user object (exclude password)
+  const user = {
+    id: client._id,
+    email: client.email,
+    username: client.username,
+    role: client.role,
+    permissions: client.permissions,
+    created_at: client.createdAt,
+  };
+
+  // Generate Tokens
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
   return { user, accessToken, refreshToken };
-}
+};
 
 /**
  * Login a client
- * @param {string} email
+ * @param {string} username
  * @param {string} password
  * @returns {Object} user, accessToken, refreshToken
  */
-export async function loginClient(username, password) {
-  const checkUserSql = "SELECT id, email, password, role, username, created_at FROM spm_clients WHERE username = $1";
-  const existing = await startQuery(checkUserSql, [username]);
-
-  if (existing.rows.length === 0) {
+export const loginClient = async (username, password) => {
+  // Find user by username
+  const client = await User.findOne({ username });
+  if (!client) {
     throw { field: "username", message: "This username does not exist." };
   }
 
-  const user = existing.rows[0];
-
-  const isPasswordValid = await comparePassword(password, user.password);
+  // Verify password
+  const isPasswordValid = await client.comparePassword(password);
   if (!isPasswordValid) {
-    throw { field: "password", message: "The password you entered is incorrect." };
+    throw { field: "password", message: "Incorrect password." };
   }
 
-  /** Generate Tokens */
+  // Prepare safe user object
+  const user = {
+    id: client._id,
+    email: client.email,
+    username: client.username,
+    role: client.role,
+    permissions: client.permissions,
+    created_at: client.createdAt,
+  };
+
+  // Generate Tokens
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
   return { user, accessToken, refreshToken };
-}
+};
