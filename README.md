@@ -31,3 +31,12 @@ cd backend && npm i
 6. Update .github/workflows/main.yml ( optional )
 
 ---
+
+---
+## Before final commit
+
+1. git rm -r --cached backend/.env
+2. git rm -r --cached frontend/.env
+3. git rm -r --cached backend/node_modules
+4. git rm -r --cached frontend/node_modules
+5. cp .env .env-copy ( frontend | backend )
