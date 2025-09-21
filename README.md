@@ -25,7 +25,7 @@ cd backend && npm i
 
 1. Copy .env-copy to .env ( frontend | backend )
 2. Update frontend .env
-3. Update backend .env
+3. Update backend .env ( especialy mongo_uri )
 4. rename project sayonph -> desired project name
 5. Update Dockerfiles ( optional )
 6. Update docker-compose.yml ( optional )
