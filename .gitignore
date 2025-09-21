@@ -9,6 +9,7 @@ frontend/node_modules/
 # Environment variables
 # -------------------------
 backend/.env
+frontend/.env
 frontend/.env.development
 frontend/.env.production
 frontend/.env.local
