@@ -10,7 +10,7 @@ MERN template ( with auth ) + TS + Docker | use if you want built in auth with m
 
 ## 🛠️ Setup Steps
 
-### After Cloning
+### After Cloning ( REQUIRED )
 
 ```bash
 docker compose up --build
