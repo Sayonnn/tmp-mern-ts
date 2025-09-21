@@ -1,71 +1,89 @@
-import { startQuery } from "../../utils/query.js";
-import { comparePassword, hashPassword } from "../../utils/hash.js";
+import Admin from "../models/Admin.model.js";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt.js";
 
+/**
+ * Register a new admin
+ */
 export const registerAdmin = async (
   email,
   password,
-  permissions = {},
-  super_admin = true,
+  permissions = [1],  // default permissions
+  super_admin = false,
   username,
-  role = "admin"   
+  role = "admin"
 ) => {
-    /** Check Email Exists */
-    const checkEmailSql = `SELECT id FROM spm_admins WHERE email = $1`;
-    const existingEmail = await startQuery(checkEmailSql, [email]);
+  /** Check if email exists */
+  const existingEmail = await Admin.findOne({ email });
+  if (existingEmail) {
+    throw { field: "email", message: "This email is already registered." };
+  }
 
-    if(existingEmail.rows.length > 0){
-        throw { field: "email", message: "This email is already registered." };
-    }
+  /** Check if username exists */
+  const existingUsername = await Admin.findOne({ username });
+  if (existingUsername) {
+    throw { field: "username", message: "This username is already registered." };
+  }
 
-    /** Check Username Exists */
-    const checkUsernameSql = "SELECT id FROM spm_admins WHERE username = $1";
-    const existingUsername = await startQuery(checkUsernameSql, [username]);
-  
-    if (existingUsername.rows.length > 0) {
-      throw { field: "username", message: "This username is already registered." };
-    }
-  
-    /** Hash Password */
-    const hashedPassword = await hashPassword(password);
+  /** Create new admin */
+  const admin = new Admin({
+    email,
+    password, // will be hashed by schema pre-save hook
+    username,
+    super_admin,
+    role,
+    permissions,
+  });
 
-    /** Save Admin */
-    const sql = `
-      INSERT INTO spm_admins (email, password, super_admin, username, permissions, role)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id, email, super_admin, username, permissions, role, created_at
-    `;
-    const params = [email, hashedPassword, super_admin, username, JSON.stringify(permissions), role];
-    const result = await startQuery(sql, params);
-    const user = result.rows[0];
+  await admin.save();
 
-    /** Generate Tokens */
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+  /** Prepare safe user object (exclude password) */
+  const user = {
+    id: admin._id,
+    email: admin.email,
+    username: admin.username,
+    role: admin.role,
+    permissions: admin.permissions,
+    super_admin: admin.super_admin,
+    created_at: admin.createdAt,
+  };
 
-    return { user, accessToken, refreshToken };
+  /** Generate Tokens */
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
+  return { user, accessToken, refreshToken };
 };
 
+/**
+ * Login an admin
+ */
 export const loginAdmin = async (username, password) => {
-    /** Check Username Exists */
-    const checkUserSql = "SELECT id, email, password, permissions, super_admin, username, role, created_at FROM spm_admins WHERE username = $1";
-    const existing = await startQuery(checkUserSql, [username]);
-  
-    if (existing.rows.length === 0) {
-      throw { field: "username", message: "This username does not exist." };
-    }
-  
-    const user = existing.rows[0];
+  /** Check username exists */
+  const admin = await Admin.findOne({ username });
+  if (!admin) {
+    throw { field: "username", message: "This username does not exist." };
+  }
 
-    /** Verify Password */
-    const isPasswordValid = await comparePassword(password, user.password);
-    if(!isPasswordValid){
-        throw { field: "password", message: "Incorrect password" };
-    }
+  /** Verify password */
+  const isPasswordValid = await admin.comparePassword(password);
+  if (!isPasswordValid) {
+    throw { field: "password", message: "Incorrect password" };
+  }
 
-    /** Generate Tokens */
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+  /** Prepare safe user object */
+  const user = {
+    id: admin._id,
+    email: admin.email,
+    username: admin.username,
+    role: admin.role,
+    permissions: admin.permissions,
+    super_admin: admin.super_admin,
+    created_at: admin.createdAt,
+  };
 
-    return { user, accessToken, refreshToken };
-}
+  /** Generate Tokens */
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
+  return { user, accessToken, refreshToken };
+};
