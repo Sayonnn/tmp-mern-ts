@@ -24,7 +24,7 @@ cd backend && npm i
 ## 🔄 Reusing the Project
 
 1. Copy .env-copy to .env ( frontend | backend )
-2. Update frontend env.development and env.production
+2. Update frontend .env
 3. Update backend .env
 4. rename project sayonph -> desired project name
 5. Update Dockerfiles ( optional )
