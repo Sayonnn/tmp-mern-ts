@@ -37,11 +37,3 @@ cd backend && npm i
 5. cp .env .env-copy ( frontend | backend )
 
 ---
-
-## 📝 Notes
-
-1. No 2FA yet ( TOTP )
-2. No forgot password feature
-3. registration UI is not implemented
-4. reset password UI is not implemented
-5. 2FA UI is not implemented
